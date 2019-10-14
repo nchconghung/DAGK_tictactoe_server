@@ -6,5 +6,8 @@ module.exports = {
     },
     single: id => {
         return db.load(`select * from accounts where Id=${id}`);
+    },
+    singleByUsername: username => {
+        return db.load(`select * from accounts where username like '${username}'`)
     }
 }

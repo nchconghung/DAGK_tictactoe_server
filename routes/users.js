@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var accountModel = require('../model/account.model');
+
+var jwt = require('jsonwebtoken');
+var passport = require('passport');
+
 /* GET users listing. */
 router.post('/register', function(req, res, next) {
   var saltRounds = 10;
@@ -18,5 +22,30 @@ router.post('/register', function(req, res, next) {
   });
   
 });
+
+router.post('/login',function(req,res,next){
+  passport.authenticate('local',{session: false},(err,user,infor)=>{
+    if (err || !user){
+      console.log(err);
+      return res.status(401).json({
+        message: infor ? infor.message : "Login Failed",
+        user: user
+      })
+    };
+    req.login(user,{session: false},(err)=>{
+      if (err){
+        res.send(err);
+      }
+      var obj = {
+        "id": user.Id,
+        "username": user.username,
+      };
+      var json = JSON.stringify(obj);
+      var token = jwt.sign(json,'rossoneri');
+      return res.json({user: user,token: token});
+    })
+  })(req,res);
+});
+
 
 module.exports = router;
