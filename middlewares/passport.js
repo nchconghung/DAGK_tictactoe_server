@@ -29,9 +29,14 @@ passport.use(new LocalStrategy({
 }));
 
 passport.use(new JWTStategy({
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
         secretOrKey: 'rossoneri'
     },function(jwtPayload,cb){
-
+        console.log(jwtPayload.id);
+        return accountModel.single(jwtPayload.id).then(user=>{
+            return cb(null,user);
+        }).catch(err=>{
+            return cb(err,false);
+        })
     }
 ));

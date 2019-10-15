@@ -37,11 +37,10 @@ router.post('/login',function(req,res,next){
         res.send(err);
       }
       var obj = {
-        "id": user.Id,
-        "username": user.username,
+        id: user.Id,
+        username: user.username
       };
-      var json = JSON.stringify(obj);
-      var token = jwt.sign(json,'rossoneri');
+      var token = jwt.sign(obj,'rossoneri');
       return res.json({user: user,token: token});
     })
   })(req,res);
