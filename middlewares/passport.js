@@ -7,8 +7,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var JWTStategy = passportJWT.Strategy;
 
 var bcrypt = require('bcrypt');
-var accountModel = require('../model/account.model');
-
+const _accountModel = require('../model/account.model');
+var accountModel = _accountModel()
 passport.use(new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'

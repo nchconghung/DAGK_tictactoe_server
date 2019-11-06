@@ -2,11 +2,11 @@ var mysql = require('mysql');
 
 var createConnection = () => {
     return mysql.createConnection({
-        host: 'remotemysql.com',
+        host: 'localhost',
         port: 3306,
-        user: 'MIiDkQ9UOD',
-        password: '3VX6ClYWV6',
-        database: 'MIiDkQ9UOD'
+        user: 'root',
+        password: 'maudoden',
+        database: 'tictactoe_db'
     });
 }
 
@@ -39,5 +39,23 @@ module.exports={
             });
             conn.end();
         })
-    }
+    },
+    update: (tableName, idField, entity) => {
+        return new Promise((resolve, reject) => {
+          var id = entity[idField];
+          delete entity[idField];
+    
+          var sql = `update ${tableName} set ? where ${idField} = ` + id;
+          var connection = createConnection();
+          connection.connect();
+          connection.query(sql, [entity], (error, value) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(value.changedRows);
+            }
+            connection.end();
+          });
+        });
+      },
 }

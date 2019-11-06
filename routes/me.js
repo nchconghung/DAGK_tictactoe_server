@@ -10,6 +10,7 @@ router.get('/', verifyToken,(req, res) => {
       res.sendStatus(403);
     } else{
       res.json({
+        ok: true,
         message: 'Authenticated User.',
         authData
       })
